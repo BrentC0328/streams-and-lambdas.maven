@@ -36,7 +36,9 @@ public final class PersonWarehouse implements Iterable<Person> {
      * @return list of names of Person objects
      */ // TODO
     public List<String> getNames() {
-        return null;
+        ArrayList<String> names = new ArrayList<>();
+        people.stream().forEach(p -> names.add(p.getName()));
+        return names;
     }
 
 
@@ -44,10 +46,10 @@ public final class PersonWarehouse implements Iterable<Person> {
      * @return list of uniquely named Person objects
      */ //TODO
     public Stream<Person> getUniquelyNamedPeople() {
-        return null;
+
+
+        return people.stream().filter(people -> people.getName()).distinct();
     }
-
-
     /**
      * @param character starting character of Person objects' name
      * @return a Stream of respective
