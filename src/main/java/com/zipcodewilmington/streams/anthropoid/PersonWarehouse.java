@@ -4,10 +4,7 @@ import com.zipcodewilmington.streams.tools.ReflectionUtils;
 import com.zipcodewilmington.streams.tools.logging.LoggerHandler;
 import com.zipcodewilmington.streams.tools.logging.LoggerWarehouse;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -46,16 +43,30 @@ public final class PersonWarehouse implements Iterable<Person> {
      * @return list of uniquely named Person objects
      */ //TODO
     public Stream<Person> getUniquelyNamedPeople() {
+        //We make a HashMap because HashMaps only allow unique keys.
+        Map<String, Person> filterThePeopleMap = new HashMap<>();
+
+        //The filter in this stream is a lambda. It takes each person in the List people and streams them into the map I created
+        Stream<Person> result = people.stream().filter(person -> filterThePeopleMap
+
+                //The way the filter works is by using putIfAbsent. maps.putIfAbsent will return null if the person is not found in the map already.
+                //It will return a person if the person is found.
+                //So, if the putIfAbsent method returns null, it means it has not found a person in the spot
+                //and that it passes the filter condition, and the lambda will finish through and add that person to the map.
+                .putIfAbsent(person.getName(), person) == null);
 
 
-        return people.stream().filter(people -> people.getName()).distinct();
+        return result;
     }
     /**
      * @param character starting character of Person objects' name
      * @return a Stream of respective
      */ //TODO
     public Stream<Person> getUniquelyNamedPeopleStartingWith(Character character) {
-        return null;
+        Map<String, Person> filterThePeopleMap = new HashMap<>();
+
+        return getUniquelyNamedPeople().filter(person -> filterThePeopleMap.putIfAbsent(person.getName(), person) == null
+                && person.getName().indexOf(character) == 0);
     }
 
     /**
@@ -63,7 +74,10 @@ public final class PersonWarehouse implements Iterable<Person> {
      * @return a Stream of respective
      */ //TODO
     public Stream<Person> getFirstNUniquelyNamedPeople(int n) {
-        return null;
+        Map<String, Person> filterThePeopleMapAgain = new HashMap<>();
+
+        return  people.stream().filter(person -> filterThePeopleMapAgain.putIfAbsent(person.getName(), person) == null
+        && filterThePeopleMapAgain.size() <= n);
     }
 
     /**
