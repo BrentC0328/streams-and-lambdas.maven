@@ -97,6 +97,12 @@ public final class PersonWarehouse implements Iterable<Person> {
      * @return Stream of Stream of Aliases
      */ // TODO
     public Stream<Stream<String>> getNestedAliases() {
+        //Aliases is a String[].
+        //Want to stream all the aliases
+        //Then put that stream in a stream
+        //So you can Stream while you Stream?
+        //We'll be back after these messages
+
         return null;
     }
 
