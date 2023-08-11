@@ -47,12 +47,12 @@ public final class PersonWarehouse implements Iterable<Person> {
         Map<String, Person> filterThePeopleMap = new HashMap<>();
 
         //The filter in this stream is a lambda. It takes each person in the List people and streams them into the map I created
+        //The way the filter works is by using putIfAbsent. maps.putIfAbsent will return null if the person is not found in the map already.
+        //It will return a person if the person is found.
+        //So, if the putIfAbsent method returns null, it means it has not found a person in the spot
+        //and that it passes the filter condition, and the lambda will finish through and add that person to the map.
         Stream<Person> result = people.stream().filter(person -> filterThePeopleMap
 
-                //The way the filter works is by using putIfAbsent. maps.putIfAbsent will return null if the person is not found in the map already.
-                //It will return a person if the person is found.
-                //So, if the putIfAbsent method returns null, it means it has not found a person in the spot
-                //and that it passes the filter condition, and the lambda will finish through and add that person to the map.
                 .putIfAbsent(person.getName(), person) == null);
 
 
@@ -84,7 +84,12 @@ public final class PersonWarehouse implements Iterable<Person> {
      * @return a mapping of Person Id to the respective Person name
      */ // TODO
     public Map<Long, String> getIdToNameMap() {
-        return null;
+        Map<Long, String> personIdandNameMap = new HashMap<>();
+
+        people.stream().forEach(person -> personIdandNameMap.put(person.getPersonalId(), person.getName()));
+
+
+        return personIdandNameMap;
     }
 
 
